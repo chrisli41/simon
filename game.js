@@ -5,6 +5,7 @@
 var State = function(prev){
 
     this.turn = '';
+    this.status = '';
     this.i = 0;
     this.sequence = [];
 
@@ -28,6 +29,11 @@ var State = function(prev){
     this.resetItr = function(){
         this.i = 0;
     }
+    
+    this.setStatus = function(_status){
+        this.status = _status;
+    }
+    
 };
 
 var Game = function(){
@@ -44,11 +50,10 @@ var Game = function(){
         if(this.currentState.turn == 'ai') {
             console.log('ai - turn');
             ai.makeMove();
-            ui.showSequence();
         }
         else {
+            ui.showSequence();
             console.log('human - turn');
-            
         }
     };
 
@@ -73,6 +78,7 @@ var AI = function(){
         var next = new State(game.currentState);
 
         next.addSequence(random);
+        next.setStatus('displaying');
         next.advanceTurn();
         
         game.advanceTo(next);

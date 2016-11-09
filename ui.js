@@ -3,10 +3,6 @@
  */
 var ui = {};
 
-ui.show = function(){
-    console.log(globals.game.currentState.sequence)
-};
-
 ui.showSequence = function(){
     var sequence = globals.game.currentState.sequence;
 
@@ -19,4 +15,20 @@ ui.showSequence = function(){
         }
     }
     f();
+    
+    globals.game.currentState.setStatus('input');
+    
+};
+
+ui.switchViewTo = function(_status){
+
+    switch (_status){
+        case 'win':
+            console.log('You Won');
+            break;
+        case 'lose':
+            console.log('You Lose');
+            break;
+    }
+
 };
