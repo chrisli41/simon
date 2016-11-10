@@ -28,7 +28,7 @@ var State = function(prev){
 
     this.resetItr = function(){
         this.i = 0;
-    }
+    };
     
     this.setStatus = function(_status){
         this.status = _status;
@@ -39,6 +39,7 @@ var State = function(prev){
 var Game = function(){
 
     var ai = {};
+    var that = this;
 
     this.currentState = new State();
     this.currentState.status = 'running';
@@ -52,8 +53,10 @@ var Game = function(){
             ai.makeMove();
         }
         else {
-            ui.showSequence();
-            console.log('human - turn');
+            ui.showSeq().then(function() {
+                console.log('human - turn');
+                that.currentState.status = 'input';
+            });
         }
     };
 

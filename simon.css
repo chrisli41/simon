@@ -1,0 +1,9 @@
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+}
+
+.light {
+    opacity: 0.5;
+}
