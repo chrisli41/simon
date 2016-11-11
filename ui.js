@@ -3,18 +3,10 @@
  */
 var ui = {};
 
-ui.switchViewTo = function(_status){
-
-    switch (_status){
-        case 'win':
-            console.log('You Won');
-            break;
-        case 'lose':
-            console.log('You Lose');
-            break;
-    }
-
-};
+var audio0 = new Audio('sounds/simonSound1.mp3');
+var audio1 = new Audio('sounds/simonSound2.mp3');
+var audio2 = new Audio('sounds/simonSound3.mp3');
+var audio3 = new Audio('sounds/simonSound4.mp3');
 
 ui.showSeq = function(){
 
@@ -22,21 +14,56 @@ ui.showSeq = function(){
     var sequence = globals.game.currentState.sequence;
 
     var d = jQuery.Deferred();
-    var doIncrease = function() {
+    var startSeq = function() {
 
         if(counter < sequence.length){
-            console.log(sequence[counter]);
+
+            ui.playSound(sequence[counter]);
 
             $("#" + sequence[counter]).addClass("light").delay(1000).queue(function(){
                 $(this).removeClass("light").dequeue();
             });
 
             counter++;
-            setTimeout(doIncrease, 2000);
+            setTimeout(startSeq, 2000);
+
         } else {
             d.resolve();
         }
     };
-    doIncrease();
+    startSeq();
     return d.promise();
+};
+
+ui.playSound = function(selected){
+    
+    switch(selected){
+        case 0:
+            audio0.play();
+            break;
+        case 1:
+            audio1.play();
+            break;
+        case 2:
+            audio2.play();
+            break;
+        case 3:
+            audio3.play();
+            break;
+    }
+};
+
+ui.switchViewTo = function(_status){
+
+    switch (_status){
+        case 'win':
+            $('.cell').hide();
+            $('#win').show();
+            break;
+        case 'lose':
+            $('.cell').hide();
+            $('#lose').show();
+            break;
+    }
+
 };

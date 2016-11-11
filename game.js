@@ -5,13 +5,14 @@
 var State = function(prev){
 
     this.turn = '';
-    this.status = '';
+    this.locked = true;
     this.i = 0;
     this.sequence = [];
 
     if(typeof prev !== 'undefined'){
         this.turn = prev.turn;
         this.sequence = prev.sequence;
+        this.locked = prev.locked;
     }
 
     this.advanceTurn = function(){
@@ -30,8 +31,8 @@ var State = function(prev){
         this.i = 0;
     };
     
-    this.setStatus = function(_status){
-        this.status = _status;
+    this.setLock = function(_lock){
+        this.locked = _lock;
     }
     
 };
@@ -42,8 +43,8 @@ var Game = function(){
     var that = this;
 
     this.currentState = new State();
-    this.currentState.status = 'running';
     this.currentState.turn = 'ai';
+    this.currentState.locked = true;
 
     this.advanceTo = function(_state){
         this.currentState = _state;
@@ -55,7 +56,7 @@ var Game = function(){
         else {
             ui.showSeq().then(function() {
                 console.log('human - turn');
-                that.currentState.status = 'input';
+                that.currentState.locked = false;
             });
         }
     };
@@ -81,7 +82,7 @@ var AI = function(){
         var next = new State(game.currentState);
 
         next.addSequence(random);
-        next.setStatus('displaying');
+        next.setLock(true);
         next.advanceTurn();
         
         game.advanceTo(next);

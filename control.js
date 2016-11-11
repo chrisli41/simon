@@ -26,26 +26,37 @@ $('.cell').click(function(){
 
     var game = globals.game;
 
-    if(game && game.currentState.turn === 'human' && game.currentState.status === 'input') {
+    if(game && game.currentState.turn === 'human' && !game.currentState.locked) {
+
         var sequence = game.currentState.sequence;
         var userChoice = $(this).data('indx');
 
+        $(this).addClass("light").delay(500).queue(function(){
+            $(this).removeClass("light").dequeue();
+        });
+
+        ui.playSound(parseInt(userChoice));
+
         console.log('userChoice: ' + userChoice +  ' seq val: ' + sequence[game.currentState.i] + ' i: ' + game.currentState.i);
+        console.log(sequence);
 
         if((userChoice === sequence[game.currentState.i]) && (game.currentState.i === (game.currentState.sequence.length - 1))){
 
             if(game.currentState.sequence.length === 10){
-                game.currentState.setStatus('end');
-                console.log('You Win');
+                ui.switchViewTo('win');
             }
 
             else {
                 var next = new State(game.currentState);
                 
                 next.advanceTurn();
-                next.setStatus('running');
+                next.setLock(true);
                 next.resetItr();
-                game.advanceTo(next);
+
+                setTimeout(function() {
+                    game.advanceTo(next);
+                }, 1000);
+
             }
         }
 
@@ -53,9 +64,12 @@ $('.cell').click(function(){
             game.currentState.iterate();
         }
         else {
-            game.currentState.setStatus('end');
-            console.log('You Lose');
-
+            
+            game.currentState.setLock(true);
+            
+            setTimeout(function() {
+                game.advanceTo(game.currentState);
+            }, 1000);
         }
     }
 
