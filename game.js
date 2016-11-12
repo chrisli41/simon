@@ -1,40 +1,65 @@
 /**
  * Created by christopherli on 11/4/16.
  */
-
 var State = function(prev){
 
-    this.turn = '';
-    this.locked = true;
-    this.i = 0;
-    this.sequence = [];
+    var lock = true,
+        turn = 'ai',
+        sequence = [],
+        i = 0,
+        gameMode = '';
 
     if(typeof prev !== 'undefined'){
-        this.turn = prev.turn;
-        this.sequence = prev.sequence;
-        this.locked = prev.locked;
+        lock = prev.getLock();
+        turn = prev.getTurn();
+        sequence = prev.getSequence();
+        i = 0;
+        gameMode = prev.getGameMode();
     }
 
-    this.advanceTurn = function(){
-        this.turn = this.turn === 'ai' ? 'human' : 'ai';
+    this.getLock = function(){
+        return lock;
     };
 
-    this.addSequence = function(_move){
-        this.sequence.push(_move);
+    this.setLock = function(_lock){
+        lock = _lock
+    };
+
+    this.getTurn = function(){
+        return turn;
+    };
+
+    this.advanceTurn = function(){
+        turn = turn === 'ai' ? 'human' : 'ai';
+    };
+
+    this.getSequence = function(){
+        return sequence;
+    };
+
+    this.addSequence = function(_itemToAdd){
+        sequence.push(_itemToAdd);
     };
 
     this.iterate = function(){
-        this.i++;
+        i++;
     };
 
     this.resetItr = function(){
-        this.i = 0;
+        i = 0;
     };
-    
-    this.setLock = function(_lock){
-        this.locked = _lock;
+
+    this.getI = function(){
+        return i;
+    };
+
+    this.getGameMode = function(){
+        return gameMode;
+    };
+
+    this.setGameMode = function(_gameMode){
+        gameMode = _gameMode;
     }
-    
 };
 
 var Game = function(){
@@ -43,52 +68,46 @@ var Game = function(){
     var that = this;
 
     this.currentState = new State();
-    this.currentState.turn = 'ai';
-    this.currentState.locked = true;
 
     this.advanceTo = function(_state){
         this.currentState = _state;
 
-        if(this.currentState.turn == 'ai') {
-            console.log('ai - turn');
+        if(this.currentState.getTurn() === 'ai'){
             ai.makeMove();
         }
         else {
-            ui.showSeq().then(function() {
-                console.log('human - turn');
-                that.currentState.locked = false;
+            ui.showSequence().then(function(){
+                that.currentState.setLock(false);
             });
         }
     };
 
     this.start = function(){
         this.advanceTo(this.currentState);
-        console.log(this.currentState.sequence);
     };
 
     this.aiPlayer = function(_ai){
         ai = _ai;
     }
-
 };
 
 var AI = function(){
 
     var game = {};
 
-    this.makeMove = function() {
-        
-        var random = Math.floor(Math.random() * 4);
+    this.makeMove = function(){
+
+        var randomChoice = Math.floor(Math.random() * 4);
         var next = new State(game.currentState);
 
-        next.addSequence(random);
-        next.setLock(true);
+        next.addSequence(randomChoice);
         next.advanceTurn();
-        
+
         game.advanceTo(next);
+
     };
 
-    this.plays = function(_game) {
+    this.plays = function(_game){
         game = _game;
     }
 };

@@ -8,10 +8,10 @@ var audio1 = new Audio('sounds/simonSound2.mp3');
 var audio2 = new Audio('sounds/simonSound3.mp3');
 var audio3 = new Audio('sounds/simonSound4.mp3');
 
-ui.showSeq = function(){
+ui.showSequence = function(){
 
     var counter = 0;
-    var sequence = globals.game.currentState.sequence;
+    var sequence = globals.game.currentState.getSequence();
 
     var d = jQuery.Deferred();
     var startSeq = function() {
@@ -20,7 +20,7 @@ ui.showSeq = function(){
 
             ui.playSound(sequence[counter]);
 
-            $("#" + sequence[counter]).addClass("light").delay(1000).queue(function(){
+            $("#" + sequence[counter]).addClass("light").delay(800).queue(function(){
                 $(this).removeClass("light").dequeue();
             });
 
