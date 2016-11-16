@@ -3,7 +3,7 @@
  */
 var State = function(prev){
 
-    var lock = true,
+    var lock = false,
         turn = 'ai',
         sequence = [],
         i = 0,

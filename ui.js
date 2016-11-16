@@ -19,13 +19,10 @@ ui.showSequence = function(){
         if(counter < sequence.length){
 
             ui.playSound(sequence[counter]);
-
-            $("#" + sequence[counter]).addClass("light").delay(800).queue(function(){
-                $(this).removeClass("light").dequeue();
-            });
+            ui.showSelected(sequence[counter]);
 
             counter++;
-            setTimeout(startSeq, 2000);
+            setTimeout(startSeq, 1000);
 
         } else {
             d.resolve();
@@ -35,8 +32,16 @@ ui.showSequence = function(){
     return d.promise();
 };
 
+ui.showSelected = function(selected){
+
+    $('#' + selected).addClass('light').delay(800).queue(function(){
+        $(this).removeClass('light').dequeue();
+    });
+
+};
+
 ui.playSound = function(selected){
-    
+
     switch(selected){
         case 0:
             audio0.play();
@@ -53,17 +58,3 @@ ui.playSound = function(selected){
     }
 };
 
-ui.switchViewTo = function(_status){
-
-    switch (_status){
-        case 'win':
-            $('.cell').hide();
-            $('#win').show();
-            break;
-        case 'lose':
-            $('.cell').hide();
-            $('#lose').show();
-            break;
-    }
-
-};

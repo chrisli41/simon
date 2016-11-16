@@ -12,40 +12,48 @@ globals.game.aiPlayer(ai);
 $(document).ready(function(){
 
     $('#start').click(function(){
-        globals.game.currentState.setGameMode('norm');
-        globals.game.start();
+        if(!globals.game.currentState.getLock()){
+
+            var newGame = new State();
+            newGame.setGameMode('norm');
+
+            globals.game.advanceTo(newGame);
+
+        }
     });
 
     $('#strict').click(function(){
-        globals.game.currentState.setGameMode('strict');
-        globals.game.start();
-    });
-
-    $('.cell').click(function(){
-
         if(!globals.game.currentState.getLock()){
 
+            var newGame = new State();
+            newGame.setGameMode('strict');
+
+            globals.game.advanceTo(newGame);
+        }
+    });
+
+    $('.quarter').click(function(){
+
+        if(!globals.game.currentState.getLock() && globals.game.currentState.getGameMode() !== ''){
+
             var sequence = globals.game.currentState.getSequence(),
-                i = globals.game.currentState.getI(),
                 gameMode = globals.game.currentState.getGameMode(),
+                i = globals.game.currentState.getI(),
 
                 userChoice = $(this).data('indx');
 
             console.log(sequence);
 
             //light up userChoice div
-            $(this).addClass('light').delay(500).queue(function(){
-                $(this).removeClass('light').dequeue();
-            });
-
-            //play sound of userChoice
+            
             ui.playSound(parseInt(userChoice));
 
             //if choice is correct and i is at the end of the current array.
             if(userChoice === sequence[i] && (i === (sequence.length - 1))){
 
                 //if sequence length is 20, user wins.
-                if(sequence.length === 20){
+                if(sequence.length === 10){
+                    globals.game.currentState.setLock(true);
                     console.log('winner');
                 }
                 // else AI adds a move to the sequence and the game advances
@@ -67,7 +75,6 @@ $(document).ready(function(){
 
             //if choice is correct but i is not at the end, iterate i.
             else if(userChoice === sequence[i]){
-
                 globals.game.currentState.iterate();
             }
 
