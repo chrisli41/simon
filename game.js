@@ -7,7 +7,8 @@ var State = function(prev){
         turn = 'ai',
         sequence = [],
         i = 0,
-        gameMode = '';
+        gameMode = '',
+        end = false;
 
     if(typeof prev !== 'undefined'){
         lock = prev.getLock();
@@ -59,6 +60,14 @@ var State = function(prev){
 
     this.setGameMode = function(_gameMode){
         gameMode = _gameMode;
+    };
+    
+    this.getEnd = function(){
+        return end;
+    };
+    
+    this.setEnd = function(_end){
+        end = _end;
     }
 };
 

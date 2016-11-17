@@ -12,22 +12,24 @@ globals.game.aiPlayer(ai);
 $(document).ready(function(){
 
     $('#start').click(function(){
-        if(!globals.game.currentState.getLock()){
+        if(!globals.game.currentState.getLock() || globals.game.currentState.getEnd()){
 
             var newGame = new State();
             newGame.setGameMode('norm');
 
+            ui.showCount('0');
             globals.game.advanceTo(newGame);
 
         }
     });
 
     $('#strict').click(function(){
-        if(!globals.game.currentState.getLock()){
+        if(!globals.game.currentState.getLock() || globals.game.currentState.getEnd()){
 
             var newGame = new State();
             newGame.setGameMode('strict');
 
+            ui.showCount('0');
             globals.game.advanceTo(newGame);
         }
     });
@@ -56,7 +58,8 @@ $(document).ready(function(){
                 //if sequence length is 20, user wins.
                 if(sequence.length === 10){
                     globals.game.currentState.setLock(true);
-                    console.log('winner');
+                    globals.game.currentState.setEnd(true);
+                    ui.showCount('Win');
                 }
                 // else AI adds a move to the sequence and the game advances
                 else {
@@ -83,6 +86,7 @@ $(document).ready(function(){
             //if choice is incorrect
             else {
 
+                ui.showIncorrect(sequence.length - 1);
                 //incorrect and normal mode, repeat current sequence after a timeout
                 if(gameMode === 'norm'){
 

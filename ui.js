@@ -62,3 +62,13 @@ ui.showCount = function(count){
     $('#count').text(count);
 };
 
+ui.showIncorrect = function(count){
+    $('#count').text('X').delay(800).queue(function(){
+        $(this).text(count).dequeue();
+    });
+};
+
+ui.showWin = function(){
+    
+};
+
