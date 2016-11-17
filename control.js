@@ -50,7 +50,9 @@ $(document).ready(function(){
 
             //if choice is correct and i is at the end of the current array.
             if(userChoice === sequence[i] && (i === (sequence.length - 1))){
-
+                
+                ui.showCount(sequence.length);
+                
                 //if sequence length is 20, user wins.
                 if(sequence.length === 10){
                     globals.game.currentState.setLock(true);

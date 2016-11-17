@@ -58,3 +58,7 @@ ui.playSound = function(selected){
     }
 };
 
+ui.showCount = function(count){
+    $('#count').text(count);
+};
+
